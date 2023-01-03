@@ -2,6 +2,12 @@ def remote = [:]
 remote.name = "WebServer"
 remote.host = "3.91.207.107"
 remote.allowAnyHosts = true
+node {
+     withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
+     remote.user = userName
+     remote.identityFile = identity
+     }
+         
 pipeline {
     agent any
     environment {
@@ -33,14 +39,8 @@ pipeline {
         }
     
          stage('Deploy') {
-             steps{
-                 withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
-                 remote.user = userName
-                 remote.identityFile = identity
                  sshCommand remote: remote, command: 'doker run --name helloworld public.ecr.aws/l9o2c9u6/helloworld:1.0'
             }
-             
-          }
-       }
+
     }
 }
