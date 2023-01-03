@@ -32,12 +32,12 @@ pipeline {
             }
         }
     
-        node{
-         withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
-            remote.user = userName
-            remote.identityFile = identity
-            stage('Deploy') {
-                sshCommand remote: remote, command: 'doker run --name helloworld public.ecr.aws/l9o2c9u6/helloworld:1.0'
+         stage('Deploy') {
+             steps{
+                 withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
+                 remote.user = userName
+                 remote.identityFile = identity
+                 sshCommand remote: remote, command: 'doker run --name helloworld public.ecr.aws/l9o2c9u6/helloworld:1.0'
             }
              
           }
