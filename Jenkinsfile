@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        ECR_TOKEN = credentials('ecr-token')
+    }
 
     stages {
         stage('Build') {
@@ -10,6 +13,13 @@ pipeline {
             }
         }
 
+        stage('Publish') {
+            steps {
+              bat 'docker tag helloworld:latest public.ecr.aws/l9o2c9u6/helloworld:latest'
+              bat 'docker push public.ecr.aws/l9o2c9u6/helloworld:latest' 
+            }
+        }   
+        
         stage('Run') {
             steps {
                 bat 'docker images'
