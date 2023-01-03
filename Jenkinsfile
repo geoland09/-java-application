@@ -7,6 +7,7 @@ node {
      remote.user = userName
      remote.identityFile = identity
      }
+}
          
 pipeline {
     agent any
