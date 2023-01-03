@@ -40,7 +40,9 @@ pipeline {
         }
     
          stage('Deploy') {
+               steps {
                  sshCommand remote: remote, command: 'doker run --name helloworld public.ecr.aws/l9o2c9u6/helloworld:1.0'
+               }
             }
 
     }
