@@ -1,8 +1,8 @@
+def remote = [:]
+remote.name = "WebServer"
+remote.host = "3.91.207.107"
+remote.allowAnyHosts = true
 pipeline {
-    def remote = [:]
-    remote.name = "WebServer"
-    remote.host = "3.91.207.107"
-    remote.allowAnyHosts = true
     agent any
     environment {
         ECR_TOKEN = credentials('ecr-token')
@@ -35,9 +35,11 @@ pipeline {
     stage('Deploy') {
     
         withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'ubuntu')]) {
-        remote.user = ubuntu
-        remote.identityFile = identity
+            remote.user = ubuntu
+            remote.identityFile = identity
+            steps{
             sshCommand remote: remote, command: 'doker run --name helloworld public.ecr.aws/l9o2c9u6/helloworld:1.0'
+            }
              
       }
     }
