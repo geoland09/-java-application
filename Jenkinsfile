@@ -27,7 +27,7 @@ pipeline {
                 bat 'docker run -t helloworld:1.0'
             }
         }
-    
+
          stages {
             stage("Deploy") {
                 steps {
@@ -46,11 +46,11 @@ pipeline {
 //                      Solution is to allow sha-rsa by adding PubkeyAcceptedAlgorithms=+ssh-rsa into /etc/ssh/sshd_config on the server.
 //                      Or use a previous version of Ubuntu that accepts sha-rsa.
                         sshCommand remote: remote, command: 'sudo docker run -t public.ecr.aws/l9o2c9u6/helloworld:1.0'
-                    }
+                                }
+                             }
+                            }
+                     }
                 }
-            }
-        }
-    }
 
-    }
+    
 }
