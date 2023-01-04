@@ -27,6 +27,7 @@ pipeline {
                 bat 'docker run -t helloworld:1.0'
             }
         }
+    }
 
          stages {
             stage("Deploy") {
@@ -51,6 +52,5 @@ pipeline {
                           }
                      }
                 }
-    }
     
 }
