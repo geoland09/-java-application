@@ -49,7 +49,8 @@ pipeline {
                 bat 'docker images'
                 bat 'docker run -t helloworld:1.0'
             }
-        }           
-    }
- }
+         }           
+       }
+     }
+  }
 }
