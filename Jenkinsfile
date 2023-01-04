@@ -28,7 +28,7 @@ pipeline {
             }
         }
     
-         stages {
+         stage {
             stage("Deploy") {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'webUser', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
