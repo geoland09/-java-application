@@ -1,18 +1,40 @@
 pipeline {
+    
     agent any
     environment {
         ECR_TOKEN = credentials('ecr-token')
     }
-
     stages {
+        stage('Build') {
+            steps {
+                withMaven(maven : 'apache-maven-3.8.6') {
+                                bat 'mvn clean install'
+                 }
+            }
+        }
         
-         stage("Deploy") {
-                steps {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
+        stage('Publish') {
+            steps {
+                bat 'docker login --username AWS --password %ECR_TOKEN% public.ecr.aws/l9o2c9u6'
+                bat 'docker tag helloworld:1.0 public.ecr.aws/l9o2c9u6/helloworld:1.0'
+                bat 'docker push public.ecr.aws/l9o2c9u6/helloworld:1.0'
+            }    
+        }
+
+        stage('Run') {
+            steps {
+                bat 'docker images'
+                bat 'docker run -t helloworld:1.0'
+            }
+        }
+        
+        stage("Deploy") {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
                     script {
                         def remote = [:]
                         remote.name = "mywebserver"
-                        remote.host = "ec2-3-91-207-107.compute-1.amazonaws.com"
+                        remote.host = "ec2-18-197-31-94.eu-central-1.compute.amazonaws.com"
                         remote.allowAnyHosts = true
                         remote.user = userName
                         remote.identityFile = identity
@@ -23,32 +45,9 @@ pipeline {
 //                      Solution is to allow sha-rsa by adding PubkeyAcceptedAlgorithms=+ssh-rsa into /etc/ssh/sshd_config on the server.
 //                      Or use a previous version of Ubuntu that accepts sha-rsa.
                         sshCommand remote: remote, command: 'sudo docker run -t public.ecr.aws/l9o2c9u6/helloworld:1.0'
-                                }
-                             }
-                          }
-                     }
-        
-        stage('Build') {
-            steps {
-                withMaven(maven : 'apache-maven-3.8.6') {
-                                bat 'mvn clean install'
-                 }
+                    }
+                }
             }
         }
-
-        stage('Publish') {
-            steps {
-              bat 'docker login --username AWS -p %ECR_TOKEN% public.ecr.aws/l9o2c9u6'
-              bat 'docker tag helloworld:1.0 public.ecr.aws/l9o2c9u6/helloworld:1.0'
-              bat 'docker push public.ecr.aws/l9o2c9u6/helloworld:1.0' 
-            }
-        }   
-        
-        stage('Run') {
-            steps {
-                bat 'docker images'
-                bat 'docker run -t helloworld:1.0'
-            }
-         }           
-       }
-     }
+    }
+}
