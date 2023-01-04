@@ -29,9 +29,9 @@ pipeline {
         }
     
          stages {
-        stage("Deploy") {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'webUser', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
+            stage("Deploy") {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'webUser', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
                     script {
                         def remote = [:]
                         remote.name = "web"
