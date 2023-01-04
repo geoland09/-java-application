@@ -34,7 +34,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
                     script {
                         def remote = [:]
-                        remote.name = "web"
+                        remote.name = "mywebserver"
                         remote.host = "ec2-3-91-207-107.compute-1.amazonaws.com"
                         remote.allowAnyHosts = true
                         remote.user = userName
@@ -48,9 +48,9 @@ pipeline {
                         sshCommand remote: remote, command: 'sudo docker run -t public.ecr.aws/l9o2c9u6/helloworld:1.0'
                                 }
                              }
-                            }
+                          }
                      }
                 }
-
+    }
     
 }
