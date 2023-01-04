@@ -31,11 +31,11 @@ pipeline {
          stage {
             stage("Deploy") {
                 steps {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'webUser', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'webserverpk', keyFileVariable: 'identity', usernameVariable: 'userName')]) {
                     script {
                         def remote = [:]
                         remote.name = "web"
-                        remote.host = "ec2-52-29-123-31.eu-central-1.compute.amazonaws.com"
+                        remote.host = "ec2-3-91-207-107.compute-1.amazonaws.com"
                         remote.allowAnyHosts = true
                         remote.user = userName
                         remote.identityFile = identity
