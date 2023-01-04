@@ -34,7 +34,7 @@ pipeline {
                     script {
                         def remote = [:]
                         remote.name = "mywebserver"
-                        remote.host = "ec2-18-197-31-94.eu-central-1.compute.amazonaws.com"
+                        remote.host = "ec2-3-91-207-107.compute-1.amazonaws.com"
                         remote.allowAnyHosts = true
                         remote.user = userName
                         remote.identityFile = identity
